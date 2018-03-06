@@ -15,7 +15,7 @@ prefixes (optional)		The prefixes to apply to the hotkey
 						Defaults to $ (Do not trigger hotkey if you send that key)
 */
 
-class TapAndHoldManager {
+class TapHoldManager {
 	Bindings := {}
 	
 	__New(tapTime := 150, prefixes := "$"){

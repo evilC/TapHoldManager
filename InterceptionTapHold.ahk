@@ -1,7 +1,7 @@
-#include TapAndHoldManager.ahk
+#include TapHoldManager.ahk
 #include CLR.ahk
 ; Patch for TapAndHoldManager to convert it to use Interception
-class InterceptionTapHold extends TapAndHoldManager {
+class InterceptionTapHold extends TapHoldManager {
 	__New(VID, PID, tapTime := 150, block := true){
 		dllFile := "AutoHotInterception.dll"
 		if (!FileExist(dllFile)){
