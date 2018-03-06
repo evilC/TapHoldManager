@@ -5,6 +5,7 @@
 
 # We use this file from another repo, so make sure it does not get into this repo
 AutoHotInterception.ahk
+CLR.ahk
 *.dll
 *.zip
 
