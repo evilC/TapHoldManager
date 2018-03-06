@@ -6,6 +6,7 @@
 # We use this file from another repo, so make sure it does not get into this repo
 AutoHotInterception.ahk
 *.dll
+*.zip
 
 # User-specific files
 *.suo
