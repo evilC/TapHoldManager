@@ -1,4 +1,4 @@
-#include InterceptionTapHold.ahk
+#include lib\InterceptionTapHold.ahk
 ;~ #include TapHoldManager.ahk
 #SingleInstance force
 #Persistent
