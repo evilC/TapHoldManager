@@ -3,6 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# We use this file from another repo, so make sure it does not get into this repo
+AutoHotInterception.ahk
 *.dll
 
 # User-specific files

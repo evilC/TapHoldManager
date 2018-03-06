@@ -1,27 +1,10 @@
 #include %A_LineFile%\..\TapHoldManager.ahk
-#include %A_LineFile%\..\CLR.ahk
+#include %A_LineFile%\..\AutoHotInterception.ahk
 
 ; Patch for TapAndHoldManager to convert it to use Interception
 class InterceptionTapHold extends TapHoldManager {
 	__New(VID, PID, tapTime := 150, block := true){
-		dllFile := A_LineFile "\..\" "AutoHotInterception.dll"
-		if (!FileExist(dllFile)){
-			MsgBox % "Unable to find " dllFile ", exiting..."
-			ExitApp
-		}
-		
-		asm := CLR_LoadLibrary(dllFile)
-		try {
-			this.Interception := asm.CreateInstance("InterceptionWrapper")
-		}
-		catch {
-			MsgBox Interception failed to load
-			ExitApp
-		}
-		if (this.Interception.Test() != "OK"){
-			MsgBox Interception Test failed
-			ExitApp
-		}
+		this.Interception := AutoHotInterception_Init()
 		
 		if (!vid || !pid){
 			MsgBox % "No VID or PID supplied for hotkey " this.keyName

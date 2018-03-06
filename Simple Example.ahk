@@ -1,5 +1,5 @@
-; If the library files are in a subfolder called lib next to the script, use this
-#include lib\TapHoldManager.ahk
+; If the library files are in a subfolder called Lib next to the script, use this
+#include Lib\TapHoldManager.ahk
 ; If you placed all the library files in your My Documents\AutoHotkey\lib folder, use this
 ;#include <TapHoldManager>
 
