@@ -24,6 +24,9 @@ class InterceptionTapHold extends TapHoldManager {
 		this.Bindings[keyName] := new InterceptionKeyManager(this, keyName, callback, tapTime, prefixes)
 	}
 
+	GetKeyboardList(){
+		return this.Interception.GetDeviceList()
+	}
 }
 
 class InterceptionKeyManager extends KeyManager {

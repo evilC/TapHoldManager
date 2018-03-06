@@ -19,6 +19,11 @@ kb1.Add("1", Func("Kb1Func"))			; TapFunc / HoldFunc now always one function
 ;kb2 := new InterceptionTapHold(VID2, PID2)	; TapTime / Prefix can now be set here
 ;kb2.Add("1", Func("Kb2Func"))			; TapFunc / HoldFunc now always one function
 
+; Un-Comment this to get a list of devices
+;devices := kb1.GetKeyboardList()
+;Clipboard := devices
+;msgbox % devices
+
 Kb1Func(isHold, taps, state){
 	ToolTip % "KB 1 Key 1`n" (isHold ? "HOLD" : "TAP") "`nTaps: " taps "`nState: " state
 }
