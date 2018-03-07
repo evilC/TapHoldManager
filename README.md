@@ -74,14 +74,14 @@ Get the interception example running, so you know AHK can speak to interception 
 
 ## Usage 
 ```
-kb1 := new InterceptionTapHold(<VID>, <PID> [, <tapTime>, <block>])  
+kb1 := new InterceptionTapHold(<VID>, <PID> [, <tapTime>, <block = true>])  
 ```
 As the normal version, however VID and PID of the device to subscribe to must be provided before any optional parameters.  
 To get VIDs / PIDs, you can call `devices := kb1.GetKeyboardList()`  
 
 Also, the `prefix` parameter is now the `block` parameter  
 Use one manager per keyboard.  
-`kb1 := new InterceptionTapHold(VID1, PID1)`  
+`kb1 := new InterceptionTapHold(0x413C, 0x2107)`  
 
 ## Optional Parameters  
 `tapTime` remains the same  
