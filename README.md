@@ -44,7 +44,7 @@ In either case, `taps` holds the number of taps which occurred.
 For example, if I double-tap, `IsHold` will be false, and `taps` will be `2`.  
 If I double-tapped and held on the second tap, then on press the function would be fired once with `IsHold` as true, taps would as `2` and state as `1`. When the key is released, the same but `state` would be `0`  
 
-# Syntax  
+## Syntax  
 ```
 thm := new TapHoldManager([ <tapTime = 200>, <prefix = "$"> ])
 thm.Add("<keyname>", <callback (function object)>)
@@ -72,7 +72,7 @@ Get the interception example running, so you know AHK can speak to interception 
 (Or, you can make sure the contents of both lib folders are in `My Documents\AutoHotkey\Lib`)  
 4. Enter the VID / PID of your keyboard(s) into the Interception example script and run  
 
-## Usage 
+## Syntax 
 ```
 kb1 := new InterceptionTapHold(<VID>, <PID> [, <tapTime>, <block = true>])  
 ```
