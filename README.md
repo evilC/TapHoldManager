@@ -44,7 +44,12 @@ In either case, `taps` holds the number of taps which occurred.
 For example, if I double-tap, `IsHold` will be false, and `taps` will be `2`.  
 If I double-tapped and held on the second tap, then on press the function would be fired once with `IsHold` as true, taps would as `2` and state as `1`. When the key is released, the same but `state` would be `0`  
 
-# Optional paramters  
+# Syntax  
+```
+thm := new TapHoldManager([ <tapTime = 200>, <prefix = "$"> ])
+thm.Add("<keyname>", <callback (function object)>)
+```
+
 The `tapTime` (The amount of time allowed before a tap or hold is called) can be configured and has a default value of 200ms.  
 The `prefix` (The prefix used for all hotkeys, default is `$`) can also be configured.  
 
@@ -67,8 +72,13 @@ Get the interception example running, so you know AHK can speak to interception 
 (Or, you can make sure the contents of both lib folders are in `My Documents\AutoHotkey\Lib`)  
 4. Enter the VID / PID of your keyboard(s) into the Interception example script and run  
 
-## Usage
+## Usage 
+```
+kb1 := new InterceptionTapHold(<VID>, <PID> [, <tapTime>, <block>])  
+```
 As the normal version, however VID and PID of the device to subscribe to must be provided before any optional parameters.  
+To get VIDs / PIDs, you can call `devices := kb1.GetKeyboardList()`  
+
 Also, the `prefix` parameter is now the `block` parameter  
 Use one manager per keyboard.  
 `kb1 := new InterceptionTapHold(VID1, PID1)`  
