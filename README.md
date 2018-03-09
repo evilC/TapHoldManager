@@ -91,7 +91,7 @@ hotkey, if, isKeyboard1Active	; < Causes TapHoldManager's hotkeys to use the con
 thm.Add("1", Func("MyFunc1"))
 ```
 
-## AutoHotInterception Subscription Mode 
+### AutoHotInterception Subscription Mode 
 A wrapper is included which extends the TapHoldManager class and replaces the hotkey bind code with Interception bind code.  
 
 **Instead of** including the TapHoldManager library, **instead** include the interception version:  
