@@ -61,8 +61,8 @@ When adding keys, you can also specify parameters to override the manager's defa
 
 When specifying parameters, you can use `-1` to leave that parameter at it's default.
 
-# Interception addon
-Also included is a variant which uses the [Interception driver](http://www.oblita.com/interception) to add support for per-keyboard hotkeys - you can bind TapHoldManager to keys on a second keyboard, and use them completely independently of your main keyboard.  
+# Integration with the Interception driver (Multiple Keyboard support)
+TapHoldManager can use the [Interception driver](http://www.oblita.com/interception) to add support for per-keyboard hotkeys - you can bind TapHoldManager to keys on a second keyboard, and use them completely independently of your main keyboard.  
 
 ## Interception Setup
 1. Set up my [AutoHotInterception](https://github.com/evilC/AutoHotInterception) AHK wrapper for Interception.  
@@ -72,16 +72,46 @@ Get the interception example running, so you know AHK can speak to interception 
 (Or, you can make sure the contents of both lib folders are in `My Documents\AutoHotkey\Lib`)  
 4. Enter the VID / PID of your keyboard(s) into the Interception example script and run  
 
-## Syntax 
-```
-kb1 := new InterceptionTapHold(<VID>, <PID> [, <tapTime>, <block = true>])  
-```
-As the normal version, however VID and PID of the device to subscribe to must be provided before any optional parameters.  
-To get VIDs / PIDs, you can call `devices := kb1.GetKeyboardList()`  
+## AutoHotInterception modes
+TapHoldManager works in both AutoHotInterception modes - "Context" and "Subscription" modes.  
 
+### AutoHotInterception Context Mode
+Just before you call `Add`, set the context for hotkeys using `hotkey, if, <context var>` which matches that which your AHK Context Callback sets.  
+For example:  
+```
+SetKb1Context(state){
+	global isKeyboard1Active
+	Sleep 0		; We seem to need this for hotstrings to work, not sure why
+	isKeyboard1Active := state
+}
+
+[...]
+
+hotkey, if, isKeyboard1Active	; < Causes TapHoldManager's hotkeys to use the context
+thm.Add("1", Func("MyFunc1"))
+```
+
+## AutoHotInterception Subscription Mode 
+A wrapper is included which extends the TapHoldManager class and replaces the hotkey bind code with Interception bind code.  
+
+**Instead of** including the TapHoldManager library, **instead** include the interception version:  
+```
+; #include Lib\TapHoldManager.ahk
+#include Lib\InterceptionTapHold.ahk
+```
+
+Instantiate `InterceptionTapHold` instead of `TapHoldManager`  
+`kb1 := new InterceptionTapHold(<VID>, <PID> [, <tapTime>, <block = true>])`  
+
+In this version, the VID and PID of the device need to be passed as the first two parameters.  
+To get VIDs / PIDs, you can call `devices := kb1.GetKeyboardList()`  
 Also, the `prefix` parameter is now the `block` parameter  
-Use one manager per keyboard.  
-`kb1 := new InterceptionTapHold(0x413C, 0x2107)`  
+
+Note: Use one manager per keyboard.  
+```
+kb1 := new InterceptionTapHold(0x413C, 0x2107)
+kb2 := new InterceptionTapHold(0x1234, 0x2107)
+```
 
 ## Optional Parameters  
 `tapTime` remains the same  
