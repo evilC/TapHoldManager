@@ -46,20 +46,25 @@ If I double-tapped and held on the second tap, then on press the function would 
 
 ## Syntax  
 ```
-thm := new TapHoldManager([ <tapTime = 200>, <prefix = "$"> ])
+thm := new TapHoldManager([ <tapTime = 200>, holdTime := -1, <prefix = "$"> ])
 thm.Add("<keyname>", <callback (function object)>)
 ```
 
 The `tapTime` (The amount of time allowed before a tap or hold is called) can be configured and has a default value of 200ms.  
+The `holdTime` (The amount of time that you need to hold a button for it to be considered a hold) defaults to the same as `tapTime`.  
 The `prefix` (The prefix used for all hotkeys, default is `$`) can also be configured.  
 
-The manager can take these optional parameters.  
-`thm := new TapHoldManager(100, "$*")`  
+You can pass as many parameters as you want.  
+`thm := new TapHoldManager()`  
+`thm := new TapHoldManager(100, 200, "$*")`  
 
-When adding keys, you can also specify parameters to override the manager's default settings
-`thm.Add("2", Func("MyFunc2"), 500, "~$")`  
+When specifying parameters, you can use `-1` to leave that parameter at it's default.  
+For example, if you only wish to alter the `prefix` (3rd) parameter, you could pass `-1` for the first two parameters.  
+`thm := new TapHoldManager(-1, -1, "$*")` 
 
-When specifying parameters, you can use `-1` to leave that parameter at it's default.
+When adding keys, you can also add the same parameters to the end to override the manager's default settings
+`thm.Add("2", Func("MyFunc2"), 300, 1000, "~$")`  
+
 
 # Integration with the Interception driver (Multiple Keyboard support)
 TapHoldManager can use the [Interception driver](http://www.oblita.com/interception) to add support for per-keyboard hotkeys - you can bind TapHoldManager to keys on a second keyboard, and use them completely independently of your main keyboard.  
