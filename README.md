@@ -62,7 +62,7 @@ When specifying parameters, you can use `-1` to leave that parameter at it's def
 For example, if you only wish to alter the `prefix` (3rd) parameter, you could pass `-1` for the first two parameters.  
 `thm := new TapHoldManager(-1, -1, "$*")` 
 
-When adding keys, you can also add the same parameters to the end to override the manager's default settings
+When adding keys, you can also add the same parameters to the end to override the manager's default settings  
 `thm.Add("2", Func("MyFunc2"), 300, 1000, "~$")`  
 
 
