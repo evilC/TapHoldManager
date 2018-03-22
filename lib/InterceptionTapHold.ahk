@@ -3,7 +3,7 @@
 
 ; Patch for TapAndHoldManager to convert it to use Interception
 class InterceptionTapHold extends TapHoldManager {
-	__New(VID, PID, tapTime := 150, block := true){
+	__New(VID, PID, tapTime := -1, holdTime := -1, block := true){
 		this.Interception := AutoHotInterception_Init()
 		
 		if (!vid || !pid){
@@ -17,11 +17,11 @@ class InterceptionTapHold extends TapHoldManager {
 			ExitApp
 		}
 
-		base.__New(tapTime, "")
+		base.__New(tapTime, holdTime, "")
 	}
 	
-	Add(keyName, callback, tapTime := -1, prefixes := -1){
-		this.Bindings[keyName] := new InterceptionKeyManager(this, keyName, callback, tapTime, prefixes)
+	Add(keyName, callback, tapTime := -1, holdTime := -1, prefixes := -1){
+		this.Bindings[keyName] := new InterceptionKeyManager(this, keyName, callback, tapTime, holdTime, prefixes)
 	}
 
 	GetKeyboardList(){
@@ -30,12 +30,12 @@ class InterceptionTapHold extends TapHoldManager {
 }
 
 class InterceptionKeyManager extends KeyManager {
-	__New(manager, keyName, Callback, tapTime := -1, block := -1){
+	__New(manager, keyName, Callback, tapTime := -1, holdTime := -1, block := -1){
 		if (block == -1){
 			block := manager.block
 		}
 		this.block := block
-		base.__New(manager, keyName, Callback, tapTime, "")
+		base.__New(manager, keyName, Callback, tapTime, holdTime, "")
 	}
 
 	DeclareHotkeys(){

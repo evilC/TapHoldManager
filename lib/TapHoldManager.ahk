@@ -18,13 +18,18 @@ prefixes (optional)		The prefixes to apply to the hotkey
 class TapHoldManager {
 	Bindings := {}
 	
-	__New(tapTime := 150, prefixes := "$"){
+	__New(tapTime := -1, holdTime := -1, prefixes := "$"){
+		if (tapTime == -1)
+			tapTime := 150
+		if (holdTime == -1)
+			holdTime := tapTime
 		this.tapTime := tapTime
+		this.holdTime := holdTime
 		this.prefixes := prefixes
 	}
 	
-	Add(keyName, callback, tapTime := -1, prefixes := -1){
-		this.Bindings[keyName] := new KeyManager(this, keyName, callback, tapTime, prefixes)
+	Add(keyName, callback, tapTime := -1, holdTime := -1, prefixes := -1){
+		this.Bindings[keyName] := new KeyManager(this, keyName, callback, tapTime, holdTime, prefixes)
 	}
 }
 
@@ -41,13 +46,19 @@ class KeyManager {
 	
 	holdActive := 0				; A hold was activated and we are waiting for the release
 	
-	__New(manager, keyName, Callback, tapTime := -1, prefixes := -1){
+	__New(manager, keyName, Callback, tapTime := -1, holdTime := -1, prefixes := -1){
 		this.manager := manager
 		this.Callback := Callback
 		if (tapTime == -1){
 			this.tapTime := manager.tapTime
 		} else {
 			this.tapTime := tapTime
+		}
+		
+		if (holdTime == -1){
+			this.holdTime := manager.holdTime
+		} else {
+			this.holdTime := holdTime
 		}
 		
 		if (prefixes == -1){
@@ -101,7 +112,7 @@ class KeyManager {
 	SetHoldWatcherState(state){
 		this.holdWatcherState := state
 		fn := this.HoldWatcherFn
-		SetTimer, % fn, % (state ? "-" this.tapTime : "Off")
+		SetTimer, % fn, % (state ? "-" this.holdTime : "Off")
 	}
 	
 	; When a key is released, if it is re-pressed within tapTime, the sequence increments
