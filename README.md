@@ -106,11 +106,18 @@ A wrapper is included which extends the TapHoldManager class and replaces the ho
 ```
 
 Instantiate `InterceptionTapHold` instead of `TapHoldManager`  
-`kb1 := new InterceptionTapHold(<VID>, <PID> [, <tapTime>, <block = true>])`  
+`kb1 := new InterceptionTapHold(<VID>, <PID> [, <isMouse = 1>, <instance = 1>, <tapTime = default THM setting>, <block = true>])`  
 
-In this version, the VID and PID of the device need to be passed as the first two parameters.  
-To get VIDs / PIDs, you can call `devices := kb1.GetKeyboardList()`  
-Also, the `prefix` parameter is now the `block` parameter  
+**Required**  
+`VID / PID` = The VendorID and ProductID of the device you wish to subscribe to.  
+To find the VID / PID of your device, you can use the Monitor demo app from the AHI project.  
+
+**Optional**  
+`isMouse` = Set to true if the device is a Mouse, else leave on false.  
+`instance` = When using multiple identical devices, this identifies which instance to use.  
+	If you only have one device, leave this at 1
+
+`tapTime`, `block` are as THM defaults
 
 Note: Use one manager per keyboard.  
 ```
