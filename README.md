@@ -3,6 +3,9 @@
 An AutoHotkey library that allows you to map multiple actions to one key using a tap-and hold system  
 Long press / Tap / Multi Tap / Tap and Hold / Multi Tap and Hold etc are all supported  
 
+# Getting Help
+Use the [TapHoldManager Discussion Thread on the AHK Forums](https://autohotkey.com/boards/viewtopic.php?f=6&t=45116)
+
 # Normal Usage
 ## Setup
 1. Download a zip from the releases page
