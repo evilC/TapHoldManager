@@ -116,15 +116,10 @@ To find the VID / PID of your device, you can use the Monitor demo app from the 
 `isMouse` = Set to true if the device is a Mouse, else leave on false.  
 `instance` = When using multiple identical devices, this identifies which instance to use.  
 	If you only have one device, leave this at 1
-
-`tapTime`, `block` are as THM defaults
+`block` = whether or not to block the input. Defaults to true.  
 
 Note: Use one manager per keyboard.  
 ```
 kb1 := new InterceptionTapHold(0x413C, 0x2107)
 kb2 := new InterceptionTapHold(0x1234, 0x2107)
 ```
-
-## Optional Parameters  
-`tapTime` remains the same  
-`prefix` is replaced by `block` - `true` to block, `false` to not block
