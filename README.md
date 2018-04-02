@@ -99,20 +99,20 @@ thm.Add("1", Func("MyFunc1"))
 ### AutoHotInterception Subscription Mode 
 A wrapper is included which extends the TapHoldManager class and replaces the hotkey bind code with Interception bind code.  
 
-**Instead of** including the TapHoldManager library, **instead** include the interception version:  
+**Instead of** including the TapHoldManager library, include the interception version:  
 ```
 ; #include Lib\TapHoldManager.ahk
 #include Lib\InterceptionTapHold.ahk
 ```
 
-Instantiate `InterceptionTapHold` instead of `TapHoldManager`  
+Instantiate `InterceptionTapHold` **instead of** `TapHoldManager`  
 `kb1 := new InterceptionTapHold(<VID>, <PID> [, <isMouse = 1>, <instance = 1>, <tapTime>, <block>])`  
 
-**Required**  
+**Required Parameters**  
 `VID / PID` = The VendorID and ProductID of the device you wish to subscribe to.  
 To find the VID / PID of your device, you can use the Monitor demo app from the AHI project.  
 
-**Optional**  
+**Optional Parameters**  
 `isMouse` = Set to true if the device is a Mouse, else leave on false.  
 `instance` = When using multiple identical devices, this identifies which instance to use.  
 	If you only have one device, leave this at 1
