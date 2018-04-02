@@ -3,7 +3,7 @@
 
 ; Patch for TapAndHoldManager to convert it to use Interception
 class InterceptionTapHold extends TapHoldManager {
-	__New(VID, PID, instance := 1, isMouse := false, tapTime := -1, holdTime := -1, block := true){
+	__New(VID, PID, isMouse := false, instance := 1, tapTime := -1, holdTime := -1, block := true){
 		this.AHI := new AutoHotInterception()
 		this.isMouse := isMouse, this.block := block
 		this.id := this.AHI.GetDeviceId(isMouse, vid, pid, instance)
