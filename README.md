@@ -106,7 +106,7 @@ A wrapper is included which extends the TapHoldManager class and replaces the ho
 ```
 
 Instantiate `InterceptionTapHold` instead of `TapHoldManager`  
-`kb1 := new InterceptionTapHold(<VID>, <PID> [, <isMouse = 1>, <instance = 1>, <tapTime = default THM setting>, <block = true>])`  
+`kb1 := new InterceptionTapHold(<VID>, <PID> [, <isMouse = 1>, <instance = 1>, <tapTime>, <block>])`  
 
 **Required**  
 `VID / PID` = The VendorID and ProductID of the device you wish to subscribe to.  
