@@ -70,14 +70,34 @@ class KeyManager {
 		
 		this.HoldWatcherFn := this.HoldWatcher.Bind(this)
 		this.TapWatcherFn := this.TapWatcher.Bind(this)
+		this.JoyReleaseFn := this.JoyButtonRelease.Bind(this)
+		this.JoyWatcherFn := this.JoyButtonWatcher.Bind(this)
 		this.DeclareHotkeys()
 	}
 	
 	DeclareHotkeys(){
 		fn := this.KeyEvent.Bind(this, 1)
 		hotkey, % this.prefixes this.keyName, % fn
-		fn := this.KeyEvent.Bind(this, 0)
-		hotkey, % this.prefixes this.keyName " up", % fn
+		if (SubStr(this.keyName, 2, 3) = "joy"){
+			fn := this.JoyReleaseFn
+			hotkey, % this.keyName " up", % fn
+		} else {
+			fn := this.KeyEvent.Bind(this, 0)
+			hotkey, % this.prefixes this.keyName " up", % fn
+		}
+	}
+	
+	JoyButtonRelease(){
+		fn := this.JoyWatcherFn
+		SetTimer, % fn, 10
+	}
+	
+	JoyButtonWatcher(){
+		if (!GetKeyState(this.keyName)){
+			fn := this.JoyWatcherFn
+			SetTimer, % fn, Off
+			this.KeyEvent(0)
+		}
 	}
 	
 	KeyEvent(state){
