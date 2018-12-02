@@ -76,7 +76,7 @@ TapHoldManager can use the [Interception driver](http://www.oblita.com/intercept
 1. Set up my [AutoHotInterception](https://github.com/evilC/AutoHotInterception) AHK wrapper for Interception.  
 Get the interception example running, so you know AHK can speak to interception OK.  
 2. Download the latest release of TapHoldManager from the releases page and extract it to a folder of your choice.  
-3. You need to add the files from AutoHotInterception's lib folder to AutoHotInterception's lib folder.  
+3. You need to add the files from TapHoldManager's lib folder to AutoHotInterception's lib folder.  
 (Or, you can make sure the contents of both lib folders are in `My Documents\AutoHotkey\Lib`)  
 4. Enter the VID / PID of your keyboard(s) into the Interception example script and run  
 
