@@ -18,18 +18,19 @@ prefixes (optional)		The prefixes to apply to the hotkey
 class TapHoldManager {
 	Bindings := {}
 	
-	__New(tapTime := -1, holdTime := -1, prefixes := "$"){
+	__New(tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := "$"){
 		if (tapTime == -1)
 			tapTime := 150
 		if (holdTime == -1)
 			holdTime := tapTime
 		this.tapTime := tapTime
 		this.holdTime := holdTime
+		this.maxTaps := maxTaps
 		this.prefixes := prefixes
 	}
 	
-	Add(keyName, callback, tapTime := -1, holdTime := -1, prefixes := -1){
-		this.Bindings[keyName] := new KeyManager(this, keyName, callback, tapTime, holdTime, prefixes)
+	Add(keyName, callback, tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := -1){
+		this.Bindings[keyName] := new KeyManager(this, keyName, callback, tapTime, holdTime, maxTaps, prefixes)
 	}
 }
 
@@ -46,7 +47,7 @@ class KeyManager {
 	
 	holdActive := 0				; A hold was activated and we are waiting for the release
 	
-	__New(manager, keyName, Callback, tapTime := -1, holdTime := -1, prefixes := -1){
+	__New(manager, keyName, Callback, tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := -1){
 		this.manager := manager
 		this.Callback := Callback
 		if (tapTime == -1){
@@ -59,6 +60,12 @@ class KeyManager {
 			this.holdTime := manager.holdTime
 		} else {
 			this.holdTime := holdTime
+		}
+		
+		if (maxTaps == -1){
+			this.maxTaps := manager.maxTaps
+		} else {
+			this.maxTaps := maxTaps
 		}
 		
 		if (prefixes == -1){
@@ -116,7 +123,13 @@ class KeyManager {
 				SetTimer, % fn, -0
 				this.ResetSequence()
 			} else {
-				this.SetTapWatcherState(1)
+				if (this.maxTaps > 0 && this.Sequence == this.maxTaps){
+					fn := this.FireCallback.Bind(this, this.sequence, -1)
+					SetTimer, % fn, -0
+					this.ResetSequence()
+				} else {
+					this.SetTapWatcherState(1)
+				}
 			}
 		}
 	}
