@@ -49,24 +49,26 @@ If I double-tapped and held on the second tap, then on press the function would 
 
 ## Syntax  
 ```
-thm := new TapHoldManager([ <tapTime = 200>, holdTime := -1, <prefix = "$"> ])
+thm := new TapHoldManager([ <tapTime := 200>, holdTime := -1, <maxTaps := -1> <prefix := "$"> ])
 thm.Add("<keyname>", <callback (function object)>)
 ```
 
-The `tapTime` (The amount of time allowed before a tap or hold is called) can be configured and has a default value of 200ms.  
-The `holdTime` (The amount of time that you need to hold a button for it to be considered a hold) defaults to the same as `tapTime`.  
-The `prefix` (The prefix used for all hotkeys, default is `$`) can also be configured.  
+`tapTime` (The amount of time allowed before a tap or hold is called) can be configured and has a default value of 200ms.  
+`holdTime` (The amount of time that you need to hold a button for it to be considered a hold) defaults to the same as `tapTime`.  
+`maxTaps` (The maximum number of taps before the callback will be fired) defaults to infinite.  
+Setting this value to `1` will force the callback to be fired after every tap, whereas by default if you tapped 3 times quickly it would fire the callback once and pass it a `taps` value of `3`, it would now be fired 3 times with a `taps` value of `1`  
+`prefix` (The prefix used for all hotkeys, default is `$`) can also be configured.  
 
 You can pass as many parameters as you want.  
 `thm := new TapHoldManager()`  
-`thm := new TapHoldManager(100, 200, "$*")`  
+`thm := new TapHoldManager(100, 200, 1, "$*")`  
 
 When specifying parameters, you can use `-1` to leave that parameter at it's default.  
-For example, if you only wish to alter the `prefix` (3rd) parameter, you could pass `-1` for the first two parameters.  
-`thm := new TapHoldManager(-1, -1, "$*")` 
+For example, if you only wish to alter the `prefix` (3rd) parameter, you could pass `-1` for the first three parameters.  
+`thm := new TapHoldManager(-1, -1, -1, "$*")` 
 
 When adding keys, you can also add the same parameters to the end to override the manager's default settings  
-`thm.Add("2", Func("MyFunc2"), 300, 1000, "~$")`  
+`thm.Add("2", Func("MyFunc2"), 300, 1000, 1, "~$")`  
 
 
 # Integration with the Interception driver (Multiple Keyboard support)
