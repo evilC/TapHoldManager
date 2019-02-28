@@ -5,11 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 ### Added
-- Added MaxTaps parameter to support always firing callback after a fixed number of taps / holds
 ### Changed 
 ### Deprecated
 ### Removed
 ### Fixed
+
+## [1.4] - 2019-02-28
+### Added
+- Added MaxTaps parameter to support always firing callback after a fixed number of taps / holds
 
 ## [1.3] - 2018-10-09
 ### Added
