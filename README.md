@@ -49,7 +49,7 @@ If I double-tapped and held on the second tap, then on press the function would 
 
 ## Syntax  
 ```
-thm := new TapHoldManager([ <tapTime := 200>, holdTime := -1, <maxTaps := -1> <prefix := "$"> ])
+thm := new TapHoldManager([ <tapTime := 200>, holdTime := -1, <maxTaps := -1>, <prefix := "$"> ])
 thm.Add("<keyname>", <callback (function object)>)
 ```
 
