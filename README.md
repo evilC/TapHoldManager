@@ -51,7 +51,7 @@ If I double-tapped and held on the second tap, then on press the function would 
 ![flowchart](Flowchart.png)  
 
 ## Example Timelines
-![timeline](Timeline.png)
+![timeline](Timelines.png)
 
 ## Syntax  
 ```
