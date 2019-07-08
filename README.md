@@ -48,7 +48,10 @@ For example, if I double-tap, `IsHold` will be false, and `taps` will be `2`.
 If I double-tapped and held on the second tap, then on press the function would be fired once with `IsHold` as true, taps would as `2` and state as `1`. When the key is released, the same but `state` would be `0`  
 
 ## Logic Flowchart
-![flowchart](Flowchart.png)
+![flowchart](Flowchart.png)  
+
+## Example Timelines
+![timeline](Timeline.png)
 
 ## Syntax  
 ```
