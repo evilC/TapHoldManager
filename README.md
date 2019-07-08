@@ -48,6 +48,7 @@ For example, if I double-tap, `IsHold` will be false, and `taps` will be `2`.
 If I double-tapped and held on the second tap, then on press the function would be fired once with `IsHold` as true, taps would as `2` and state as `1`. When the key is released, the same but `state` would be `0`  
 
 ## Logic Flowchart
+(Note that the firing of the function on key release during a hold is omitted from this diagram for brevity)
 ![flowchart](Flowchart.png)  
 
 ## Example Timelines
