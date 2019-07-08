@@ -49,7 +49,7 @@ If I double-tapped and held on the second tap, then on press the function would 
 
 ## Logic Flowchart
 (Note that the firing of the function on key release during a hold is omitted from this diagram for brevity)
-![flowchart](Flowchart.png)  
+![flowchart](LogicFlowchart.png)  
 
 ## Example Timelines
 ![timeline](Timelines.png)
