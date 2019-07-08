@@ -56,18 +56,19 @@ If I double-tapped and held on the second tap, then on press the function would 
 
 ## Syntax  
 ```
-thm := new TapHoldManager([ <tapTime := 200>, holdTime := -1, <maxTaps := -1>, <prefix := "$"> ])
+thm := new TapHoldManager([ <tapTime := -1>, holdTime := -1, <maxTaps := -1>, <prefix := "$"> ])
 thm.Add("<keyname>", <callback (function object)>)
 ```
 
-`tapTime` The amount of time after a tap occured to wait for another tap.  
-Can be configured and has a default value of 200ms.  
-`holdTime` The amount of time that you need to hold a button for it to be considered a hold.  
+**tapTime** The amount of time after a tap occured to wait for another tap.  
+Defaults to 150ms.  
+**holdTime** The amount of time that you need to hold a button for it to be considered a hold.  
 Defaults to the same as `tapTime`.  
-`maxTaps` The maximum number of taps before the callback will be fired.  
+**maxTaps** The maximum number of taps before the callback will be fired.  
 Defaults to infinite.  
-Setting this value to `1` will force the callback to be fired after every tap, whereas by default if you tapped 3 times quickly it would fire the callback once and pass it a `taps` value of `3`, it would now be fired 3 times with a `taps` value of `1`  
-`prefix` The prefix used for all hotkeys, default is `$`
+Setting this value to `1` will force the callback to be fired after every tap, whereas by default if you tapped 3 times quickly it would fire the callback once and pass it a `taps` value of `3`, it would now be fired 3 times with a `taps` value of `1`.  
+If `maxTaps` is 1, then the `tapTime` setting will have no effect.  
+**prefix** The prefix used for all hotkeys, default is `$`  
 
 You can pass as many parameters as you want.  
 `thm := new TapHoldManager()`  
@@ -80,6 +81,10 @@ For example, if you only wish to alter the `prefix` (3rd) parameter, you could p
 When adding keys, you can also add the same parameters to the end to override the manager's default settings  
 `thm.Add("2", Func("MyFunc2"), 300, 1000, 1, "~$")`  
 
+## Minimizing response times  
+To make taps fire as quickly as possible, set `tapTime` as low as possible.  
+If you do not require multi-tap or multi-tap-and-hold, then setting `maxTaps` to 1 will make taps respond instantly upon release of the key. In this mode, the `tapTime` setting will have no effect.  
+To make holds fire as quickly as possible, setting `holdTime` as low as possible will help. `maxTaps` will not affect response time of holds, as they always end a sequence.
 
 # Integration with the Interception driver (Multiple Keyboard support)
 TapHoldManager can use the [Interception driver](http://www.oblita.com/interception) to add support for per-keyboard hotkeys - you can bind TapHoldManager to keys on a second keyboard, and use them completely independently of your main keyboard.  
