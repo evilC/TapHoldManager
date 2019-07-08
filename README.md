@@ -47,17 +47,23 @@ In either case, `taps` holds the number of taps which occurred.
 For example, if I double-tap, `IsHold` will be false, and `taps` will be `2`.  
 If I double-tapped and held on the second tap, then on press the function would be fired once with `IsHold` as true, taps would as `2` and state as `1`. When the key is released, the same but `state` would be `0`  
 
+## Logic Flowchart
+![flowchart](Flowchart.png)
+
 ## Syntax  
 ```
 thm := new TapHoldManager([ <tapTime := 200>, holdTime := -1, <maxTaps := -1>, <prefix := "$"> ])
 thm.Add("<keyname>", <callback (function object)>)
 ```
 
-`tapTime` (The amount of time allowed before a tap or hold is called) can be configured and has a default value of 200ms.  
-`holdTime` (The amount of time that you need to hold a button for it to be considered a hold) defaults to the same as `tapTime`.  
-`maxTaps` (The maximum number of taps before the callback will be fired) defaults to infinite.  
+`tapTime` The amount of time after a tap occured to wait for another tap.  
+Can be configured and has a default value of 200ms.  
+`holdTime` The amount of time that you need to hold a button for it to be considered a hold.  
+Defaults to the same as `tapTime`.  
+`maxTaps` The maximum number of taps before the callback will be fired.  
+Defaults to infinite.  
 Setting this value to `1` will force the callback to be fired after every tap, whereas by default if you tapped 3 times quickly it would fire the callback once and pass it a `taps` value of `3`, it would now be fired 3 times with a `taps` value of `1`  
-`prefix` (The prefix used for all hotkeys, default is `$`) can also be configured.  
+`prefix` The prefix used for all hotkeys, default is `$`
 
 You can pass as many parameters as you want.  
 `thm := new TapHoldManager()`  
