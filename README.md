@@ -47,13 +47,6 @@ In either case, `taps` holds the number of taps which occurred.
 For example, if I double-tap, `IsHold` will be false, and `taps` will be `2`.  
 If I double-tapped and held on the second tap, then on press the function would be fired once with `IsHold` as true, taps would as `2` and state as `1`. When the key is released, the same but `state` would be `0`  
 
-## Logic Flowchart
-(Note that the firing of the function on key release during a hold is omitted from this diagram for brevity)
-![flowchart](LogicFlowchart.png)  
-
-## Example Timelines
-![timeline](Timelines.png)
-
 ## Syntax  
 ```
 thm := new TapHoldManager([ <tapTime := -1>, holdTime := -1, <maxTaps := -1>, <prefix := "$"> ])
@@ -80,6 +73,13 @@ For example, if you only wish to alter the `prefix` (3rd) parameter, you could p
 
 When adding keys, you can also add the same parameters to the end to override the manager's default settings  
 `thm.Add("2", Func("MyFunc2"), 300, 1000, 1, "~$")`  
+
+## Logic Flowchart
+(Note that the firing of the function on key release during a hold is omitted from this diagram for brevity)
+![flowchart](LogicFlowchart.png)  
+
+## Example Timelines
+![timeline](Timelines.png)
 
 ## Minimizing response times  
 To make taps fire as quickly as possible, set `tapTime` as low as possible.  
