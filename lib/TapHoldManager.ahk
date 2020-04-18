@@ -40,6 +40,18 @@ window (optional)		The window criteria to apply to the hotkey
 	$4:: ; simple/normal hotkey to hide tooltip
 		ToolTip
 	return
+	
+	$5:: ; pause hotkey "2"
+		thm.PauseKey("2")
+	return
+
+	$6:: ; resume hotkey "2"
+		thm.ResumeKey("2")
+	return
+
+	$7:: ; remove hotkey "2"
+		thm.RemoveKey("2")
+	return
 */
 
 class TapHoldManager {
@@ -59,6 +71,19 @@ class TapHoldManager {
 	
 	Add(keyName, callback, tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := -1, window := ""){
 		this.Bindings[keyName] := new KeyManager(this, keyName, callback, tapTime, holdTime, maxTaps, prefixes, window)
+	}
+	
+	RemoveKey(keyName){ ; to remove hotkey
+		this.Bindings[keyName].Toggle(0)
+		this.Bindings.delete(keyName)
+	}
+	
+	PauseKey(keyName) { ; to pause hotkey temprarily
+		this.Bindings[keyName].Toggle(0)
+	}
+	
+	ResumeKey(keyName) { ; resume previously deactivated hotkey
+		this.Bindings[keyName].Toggle(1)
 	}
 }
 
@@ -122,17 +147,33 @@ class KeyManager {
 			hotkey, IfWinActive, % this.window ; sets the hotkey window context if window option is passed-in
 		
 		fn := this.KeyEvent.Bind(this, 1)
-		hotkey, % this.prefixes this.keyName, % fn
+		hotkey, % this.prefixes this.keyName, % fn, On ; On option is important in case hotkey previously defined and turned off.
 		if (SubStr(this.keyName, 2, 3) = "joy"){
 			fn := this.JoyReleaseFn
-			hotkey, % this.keyName " up", % fn
+			hotkey, % this.keyName " up", % fn, On
 		} else {
 			fn := this.KeyEvent.Bind(this, 0)
-			hotkey, % this.prefixes this.keyName " up", % fn
+			hotkey, % this.prefixes this.keyName " up", % fn, On
 		}
 		
 		if (this.window)
 			hotkey, IfWinActive ; retrieves hotkey window context to default
+	}
+	
+	Toggle(state){ ; turns On/Off hotkeys (should be previously declared) // state is either "1: On" or "0: Off"
+		if (this.window)
+			hotkey, IfWinActive, % this.window
+
+		hotkey, % this.prefixes this.keyName, % (state ? "On" : "Off")
+
+		if (SubStr(this.keyName, 2, 3) = "joy"){
+			hotkey, % this.keyName " up", % (state ? "On" : "Off")
+		} else {
+			hotkey, % this.prefixes this.keyName " up", % (state ? "On" : "Off")
+		}
+
+		if (this.window)
+			hotkey, IfWinActive
 	}
 	
 	JoyButtonRelease(){
