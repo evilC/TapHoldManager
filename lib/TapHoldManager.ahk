@@ -74,16 +74,16 @@ class TapHoldManager {
 	}
 	
 	RemoveKey(keyName){ ; to remove hotkey
-		this.Bindings[keyName].Toggle(0)
+		this.Bindings[keyName].SetState(0)
 		this.Bindings.delete(keyName)
 	}
 	
 	PauseKey(keyName) { ; to pause hotkey temprarily
-		this.Bindings[keyName].Toggle(0)
+		this.Bindings[keyName].SetState(0)
 	}
 	
 	ResumeKey(keyName) { ; resume previously deactivated hotkey
-		this.Bindings[keyName].Toggle(1)
+		this.Bindings[keyName].SetState(1)
 	}
 }
 
@@ -160,7 +160,8 @@ class KeyManager {
 			hotkey, IfWinActive ; retrieves hotkey window context to default
 	}
 	
-	Toggle(state){ ; turns On/Off hotkeys (should be previously declared) // state is either "1: On" or "0: Off"
+	SetState(state){ ; turns On/Off hotkeys (should be previously declared) // state is either "1: On" or "0: Off"
+		; "state" under this method context refers to whether the hotkey will be turned on or off, while in other methods context "state" refers to the current activity on the hotkey (whether it's pressed or released (after a tap or hold))
 		if (this.window)
 			hotkey, IfWinActive, % this.window
 
