@@ -13,12 +13,39 @@ tapTime (optional)		The amount of time to wait before deciding if an event is a 
 						
 prefixes (optional)		The prefixes to apply to the hotkey
 						Defaults to $ (Do not trigger hotkey if you send that key)
+						
+window (optional)		The window criteria to apply to the hotkey
+						Defaults to "" (The hotkey will be available on all windows)
+*/
+
+/*
+	; Test Example
+	thm := new TapHoldManager(,,maxTaps = 3,,"ahk_exe notepad.exe") ; with window parameter set here, default window criteria that will be set for all sub-created hotkeys under this manager object is notepad
+	thm.Add("1", Func("MyFunc1"))
+	thm.Add("2", Func("MyFunc2"))
+	thm.Add("3", Func("MyFunc3"),,,,,"ahk_exe sublime_text.exe") ; this hotkey's window criteria will be sublime_text (instead of manager object's previously passed-in notepad default)
+	
+	MyFunc1(isHold, taps, state){
+		ToolTip % "1`n" (isHold ? "HOLD" : "TAP") "`nTaps: " taps "`nState: " state
+	}
+
+	MyFunc2(isHold, taps, state){
+		ToolTip % "2`n" (isHold ? "HOLD" : "TAP") "`nTaps: " taps "`nState: " state
+	}
+
+	MyFunc3(isHold, taps, state){
+		ToolTip % "3`n" (isHold ? "HOLD" : "TAP") "`nTaps: " taps "`nState: " state
+	}
+	
+	$4:: ; simple/normal hotkey to hide tooltip
+		ToolTip
+	return
 */
 
 class TapHoldManager {
 	Bindings := {}
 	
-	__New(tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := "$"){
+	__New(tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := "$", window := ""){
 		if (tapTime == -1)
 			tapTime := 150
 		if (holdTime == -1)
@@ -27,10 +54,11 @@ class TapHoldManager {
 		this.holdTime := holdTime
 		this.maxTaps := maxTaps
 		this.prefixes := prefixes
+		this.window := window
 	}
 	
-	Add(keyName, callback, tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := -1){
-		this.Bindings[keyName] := new KeyManager(this, keyName, callback, tapTime, holdTime, maxTaps, prefixes)
+	Add(keyName, callback, tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := -1, window := ""){
+		this.Bindings[keyName] := new KeyManager(this, keyName, callback, tapTime, holdTime, maxTaps, prefixes, window)
 	}
 }
 
@@ -47,7 +75,7 @@ class KeyManager {
 	
 	holdActive := 0				; A hold was activated and we are waiting for the release
 	
-	__New(manager, keyName, Callback, tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := -1){
+	__New(manager, keyName, Callback, tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := -1, window := ""){
 		this.manager := manager
 		this.Callback := Callback
 		if (tapTime == -1){
@@ -73,6 +101,13 @@ class KeyManager {
 		} else {
 			this.prefixes := prefixes
 		}
+		
+		if (window){ ; if window criteria is passed-in
+			this.window := window
+		} else { ; if no window criteria passed-in
+			this.window := manager.window
+		}
+		
 		this.keyName := keyName
 		
 		this.HoldWatcherFn := this.HoldWatcher.Bind(this)
@@ -83,6 +118,9 @@ class KeyManager {
 	}
 	
 	DeclareHotkeys(){
+		if (this.window)
+			hotkey, IfWinActive, % this.window ; sets the hotkey window context if window option is passed-in
+		
 		fn := this.KeyEvent.Bind(this, 1)
 		hotkey, % this.prefixes this.keyName, % fn
 		if (SubStr(this.keyName, 2, 3) = "joy"){
@@ -92,6 +130,9 @@ class KeyManager {
 			fn := this.KeyEvent.Bind(this, 0)
 			hotkey, % this.prefixes this.keyName " up", % fn
 		}
+		
+		if (this.window)
+			hotkey, IfWinActive ; retrieves hotkey window context to default
 	}
 	
 	JoyButtonRelease(){
