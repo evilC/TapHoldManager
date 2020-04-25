@@ -18,42 +18,6 @@ window (optional)		The window criteria to apply to the hotkey
 						Defaults to "" (The hotkey will be available on all windows)
 */
 
-/*
-	; Test Example
-	thm := new TapHoldManager(,,maxTaps = 3,,"ahk_exe notepad.exe") ; with window parameter set here, default window criteria that will be set for all sub-created hotkeys under this manager object is notepad
-	thm.Add("1", Func("MyFunc1"))
-	thm.Add("2", Func("MyFunc2"))
-	thm.Add("3", Func("MyFunc3"),,,,,"ahk_exe sublime_text.exe") ; this hotkey's window criteria will be sublime_text (instead of manager object's previously passed-in notepad default)
-	
-	MyFunc1(isHold, taps, state){
-		ToolTip % "1`n" (isHold ? "HOLD" : "TAP") "`nTaps: " taps "`nState: " state
-	}
-
-	MyFunc2(isHold, taps, state){
-		ToolTip % "2`n" (isHold ? "HOLD" : "TAP") "`nTaps: " taps "`nState: " state
-	}
-
-	MyFunc3(isHold, taps, state){
-		ToolTip % "3`n" (isHold ? "HOLD" : "TAP") "`nTaps: " taps "`nState: " state
-	}
-	
-	$4:: ; simple/normal hotkey to hide tooltip
-		ToolTip
-	return
-	
-	$5:: ; pause hotkey "2"
-		thm.PauseKey("2")
-	return
-
-	$6:: ; resume hotkey "2"
-		thm.ResumeKey("2")
-	return
-
-	$7:: ; remove hotkey "2"
-		thm.RemoveKey("2")
-	return
-*/
-
 class TapHoldManager {
 	Bindings := {}
 	
@@ -69,20 +33,20 @@ class TapHoldManager {
 		this.window := window
 	}
 	
-	Add(keyName, callback, tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := -1, window := ""){
+	Add(keyName, callback, tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := -1, window := ""){    ; Add hotkey
 		this.Bindings[keyName] := new KeyManager(this, keyName, callback, tapTime, holdTime, maxTaps, prefixes, window)
 	}
 	
-	RemoveKey(keyName){ ; to remove hotkey
+	RemoveHotkey(keyName){ ; to remove hotkey
 		this.Bindings[keyName].SetState(0)
 		this.Bindings.delete(keyName)
 	}
 	
-	PauseKey(keyName) { ; to pause hotkey temprarily
+	PauseHotkey(keyName) { ; to pause hotkey temprarily
 		this.Bindings[keyName].SetState(0)
 	}
 	
-	ResumeKey(keyName) { ; resume previously deactivated hotkey
+	ResumeHotkey(keyName) { ; resume previously deactivated hotkey
 		this.Bindings[keyName].SetState(1)
 	}
 }
