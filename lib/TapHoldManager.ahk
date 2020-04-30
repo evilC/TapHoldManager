@@ -13,12 +13,15 @@ tapTime (optional)		The amount of time to wait before deciding if an event is a 
 						
 prefixes (optional)		The prefixes to apply to the hotkey
 						Defaults to $ (Do not trigger hotkey if you send that key)
+						
+window (optional)		The window criteria to apply to the hotkey
+						Defaults to "" (The hotkey will be available on all windows)
 */
 
 class TapHoldManager {
 	Bindings := {}
 	
-	__New(tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := "$"){
+	__New(tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := "$", window := ""){
 		if (tapTime == -1)
 			tapTime := 150
 		if (holdTime == -1)
@@ -27,10 +30,24 @@ class TapHoldManager {
 		this.holdTime := holdTime
 		this.maxTaps := maxTaps
 		this.prefixes := prefixes
+		this.window := window
 	}
 	
-	Add(keyName, callback, tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := -1){
-		this.Bindings[keyName] := new KeyManager(this, keyName, callback, tapTime, holdTime, maxTaps, prefixes)
+	Add(keyName, callback, tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := -1, window := ""){    ; Add hotkey
+		this.Bindings[keyName] := new KeyManager(this, keyName, callback, tapTime, holdTime, maxTaps, prefixes, window)
+	}
+	
+	RemoveHotkey(keyName){ ; to remove hotkey
+		this.Bindings[keyName].SetState(0)
+		this.Bindings.delete(keyName)
+	}
+	
+	PauseHotkey(keyName) { ; to pause hotkey temprarily
+		this.Bindings[keyName].SetState(0)
+	}
+	
+	ResumeHotkey(keyName) { ; resume previously deactivated hotkey
+		this.Bindings[keyName].SetState(1)
 	}
 }
 
@@ -47,7 +64,7 @@ class KeyManager {
 	
 	holdActive := 0				; A hold was activated and we are waiting for the release
 	
-	__New(manager, keyName, Callback, tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := -1){
+	__New(manager, keyName, Callback, tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := -1, window := ""){
 		this.manager := manager
 		this.Callback := Callback
 		if (tapTime == -1){
@@ -73,6 +90,13 @@ class KeyManager {
 		} else {
 			this.prefixes := prefixes
 		}
+		
+		if (window){ ; if window criteria is passed-in
+			this.window := window
+		} else { ; if no window criteria passed-in
+			this.window := manager.window
+		}
+		
 		this.keyName := keyName
 		
 		this.HoldWatcherFn := this.HoldWatcher.Bind(this)
@@ -83,15 +107,38 @@ class KeyManager {
 	}
 	
 	DeclareHotkeys(){
+		if (this.window)
+			hotkey, IfWinActive, % this.window ; sets the hotkey window context if window option is passed-in
+		
 		fn := this.KeyEvent.Bind(this, 1)
-		hotkey, % this.prefixes this.keyName, % fn
+		hotkey, % this.prefixes this.keyName, % fn, On ; On option is important in case hotkey previously defined and turned off.
 		if (SubStr(this.keyName, 2, 3) = "joy"){
 			fn := this.JoyReleaseFn
-			hotkey, % this.keyName " up", % fn
+			hotkey, % this.keyName " up", % fn, On
 		} else {
 			fn := this.KeyEvent.Bind(this, 0)
-			hotkey, % this.prefixes this.keyName " up", % fn
+			hotkey, % this.prefixes this.keyName " up", % fn, On
 		}
+		
+		if (this.window)
+			hotkey, IfWinActive ; retrieves hotkey window context to default
+	}
+	
+	SetState(state){ ; turns On/Off hotkeys (should be previously declared) // state is either "1: On" or "0: Off"
+		; "state" under this method context refers to whether the hotkey will be turned on or off, while in other methods context "state" refers to the current activity on the hotkey (whether it's pressed or released (after a tap or hold))
+		if (this.window)
+			hotkey, IfWinActive, % this.window
+
+		hotkey, % this.prefixes this.keyName, % (state ? "On" : "Off")
+
+		if (SubStr(this.keyName, 2, 3) = "joy"){
+			hotkey, % this.keyName " up", % (state ? "On" : "Off")
+		} else {
+			hotkey, % this.prefixes this.keyName " up", % (state ? "On" : "Off")
+		}
+
+		if (this.window)
+			hotkey, IfWinActive
 	}
 	
 	JoyButtonRelease(){
