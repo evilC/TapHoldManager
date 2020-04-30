@@ -119,27 +119,41 @@ thm.Add("1", Func("MyFunc1"))
 ### AutoHotInterception Subscription Mode 
 A wrapper is included which extends the TapHoldManager class and replaces the hotkey bind code with Interception bind code.  
 
-**Instead of** including the TapHoldManager library, include the interception version:  
+**As well as** including the TapHoldManager library, include `InterceptionTapHold.ahk` and `AutoHotInterception.ahk`.  
+There are many ways to do this - you could either have one Lib folder next to the script containing the contents of both the AHI Lib folder and the THM Lib folder, and use:
 ```
-; #include Lib\TapHoldManager.ahk
+#include Lib\TapHoldManager.ahk
 #include Lib\InterceptionTapHold.ahk
+#include Lib\AutoHotInterception.ahk
 ```
 
-Instantiate `InterceptionTapHold` **instead of** `TapHoldManager`  
-`kb1 := new InterceptionTapHold(<VID>, <PID> [, <isMouse = 1>, <instance = 1>, <tapTime>, <block>])`  
+Or, copy the contents of both the AHI and THM Lib folders to `C:\My Documents\AutoHotkey\Lib`, and use  
+```
+#include <AutoHotInterception>
+#include <InterceptionTapHold>
+#include <TapHoldManager>
+```
+
+Instantiate AutoHotInterception:  
+`AHI := new AutoHotInterception()`
+
+Get the ID of your device:  
+`keyboard1Id := AHI.GetKeyboardId(0x03EB, 0xFF02)`
+
+Instantiate `InterceptionTapHold` **instead of** `TapHoldManager` and pass in the AHI instance and the id of the device:  
+`THI1 := new InterceptionTapHold(<AHI Instance>, <Device ID> [, <tapTime>, <holdTime>, <maxTaps>, <block>])`  
+eg `ITH1 := new InterceptionTapHold(AHI, keyboard1Id)`  
 
 **Required Parameters**  
-`VID / PID` = The VendorID and ProductID of the device you wish to subscribe to.  
-To find the VID / PID of your device, you can use the Monitor demo app from the AHI project.  
+`AHI Instance` = An Instance of the AutoHotInterception class  
+`Device ID` = The ID of the device to subscribe to  
 
 **Optional Parameters**  
-`isMouse` = Set to true if the device is a Mouse, else leave on false.  
-`instance` = When using multiple identical devices, this identifies which instance to use.  
-	If you only have one device, leave this at 1
+The usual THM parameters, plus:  
 `block` = whether or not to block the input. Defaults to true.  
 
 Note: Use one manager per keyboard.  
 ```
-kb1 := new InterceptionTapHold(0x413C, 0x2107)
-kb2 := new InterceptionTapHold(0x1234, 0x2107)
+ITH1 := new InterceptionTapHold(AHI, keyboardId1)
+ITH2 := new InterceptionTapHold(AHI, keyboardId2)
 ```
