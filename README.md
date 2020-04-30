@@ -47,11 +47,8 @@ In either case, `taps` holds the number of taps which occurred.
 For example, if I double-tap, `IsHold` will be false, and `taps` will be `2`.  
 If I double-tapped and held on the second tap, then on press the function would be fired once with `IsHold` as true, taps would as `2` and state as `1`. When the key is released, the same but `state` would be `0`  
 
-## Syntax  
-```
-thm := new TapHoldManager([ <tapTime := -1>, holdTime := -1, <maxTaps := -1>, <prefix := "$"> ])
-thm.Add("<keyname>", <callback (function object)>)
-```
+## Instantiating TapHoldManager  
+`thm := new TapHoldManager([ <tapTime := -1>, holdTime := -1, <maxTaps := -1>, <prefix := "$">, <window := ""> ])`
 
 **tapTime** The amount of time after a tap occured to wait for another tap.  
 Defaults to 150ms.  
@@ -62,17 +59,34 @@ Defaults to infinite.
 Setting this value to `1` will force the callback to be fired after every tap, whereas by default if you tapped 3 times quickly it would fire the callback once and pass it a `taps` value of `3`, it would now be fired 3 times with a `taps` value of `1`.  
 If `maxTaps` is 1, then the `tapTime` setting will have no effect.  
 **prefix** The prefix used for all hotkeys, default is `$`  
+**window** An AHK [WinTitle](https://www.autohotkey.com/docs/misc/WinTitle.htm) string that defines which windows the hotkey will take effect in  
+For example, to make Hotkeys only work in Notepad, you could use:  
+`thm := new TapHoldManager(,,,,"ahk_exe notepad.exe")`  
 
 You can pass as many parameters as you want.  
 `thm := new TapHoldManager()`  
 `thm := new TapHoldManager(100, 200, 1, "$*")`  
 
-When specifying parameters, you can use `-1` to leave that parameter at it's default.  
-For example, if you only wish to alter the `prefix` (3rd) parameter, you could pass `-1` for the first three parameters.  
+When specifying parameters, you can omit the parameter (or use `-1`) to leave that parameter at it's default.  
+For example, if you only wish to alter the `prefix` (3rd) parameter, you could do:  
 `thm := new TapHoldManager(-1, -1, -1, "$*")` 
+Or  
+`thm := new TapHoldManager(,,, "$*")` 
 
+## Adding Hotkeys
+`thm.Add("<keyname>", <callback (function object)> [,<tapTime := -1>, holdTime := -1, <maxTaps := -1>, <prefix := "$">, <window := "">])`  
 When adding keys, you can also add the same parameters to the end to override the manager's default settings  
 `thm.Add("2", Func("MyFunc2"), 300, 1000, 1, "~$")`  
+
+## Enabling or Disabling Hotkeys  
+Hotkeys can be disabled by calling `PauseHotkey` and passing the name of the key to pause:  
+`thm.PauseHotkey("1")`  
+
+Hotkeys can be re-enabled by calling `ResumeHotkey` and passing the name of the key to resume:  
+`thm.PauseHotkey("1")`  
+
+Hotkeys can be removed by calling `RemoveHotkey` and passing the name of the key to remove:  
+`thm.RemoveKey("1")`  
 
 ## Logic Flowchart
 (Note that the firing of the function on key release during a hold is omitted from this diagram for brevity)
