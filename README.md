@@ -122,7 +122,7 @@ For example:
 #include <AutoHotInterception>
 
 AHI := new AutoHotInterception()
-keyboardId := AHI.GetKeyboardId(0x03EB, 0xFF02, 2)
+keyboardId := AHI.GetKeyboardId(0x03EB, 0xFF02)
 cm1 := AHI.CreateContextManager(keyboardId)
 
 thm := new TapHoldManager()
