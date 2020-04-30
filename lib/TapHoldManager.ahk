@@ -1,23 +1,3 @@
-/*
-Tap and Hold Manager v1.1
-
-Callback				A function object to call when a tap occurs
-						The function will be passed the number of taps that occurred.
-						The function will also be passed the event that occurred
-							-1 = Tap
-							1 = (Hold) Press
-							0 = (Hold) Release
-							
-tapTime (optional)		The amount of time to wait before deciding if an event is a tap or hold
-						Defaults to 200ms
-						
-prefixes (optional)		The prefixes to apply to the hotkey
-						Defaults to $ (Do not trigger hotkey if you send that key)
-						
-window (optional)		The window criteria to apply to the hotkey
-						Defaults to "" (The hotkey will be available on all windows)
-*/
-
 class TapHoldManager {
 	Bindings := {}
 	
