@@ -17,4 +17,16 @@ MyFunc2(isHold, taps, state){
 	ToolTip % "2`n" (isHold ? "HOLD" : "TAP") "`nTaps: " taps "`nState: " state
 }
 
+$F1:: ; pause hotkey "2"
+  thm.PauseHotkey("2")
+return
+
+$F2:: ; resume hotkey "2"
+  thm.ResumeHotkey("2")
+return
+
+$F3:: ; remove hotkey "2"
+  thm.RemoveHotkey("2")
+return
+
 ^Esc::ExitApp
