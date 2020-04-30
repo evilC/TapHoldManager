@@ -1,7 +1,15 @@
+; Demonstrates Interception Subscription Mode with TapHoldManager
 #SingleInstance force
+; Use these includes if you placed the contents of the TapHoldManager and AutoHotInterception Lib folders in the AHK lib folder (My Documents\AutoHotkey\Lib)
 #include <AutoHotInterception>
 #include <InterceptionTapHold>
 #include <TapHoldManager>
+
+; Use these includes if you placed the contents of the TapHoldManager and AutoHotInterception Lib folders in a lib folder next to this script
+; ie copy the AutoHotInterception Lib folder into the TapHoldManager Lib folder
+;#include Lib\AutoHotInterception.ahk
+;#include Lib\InterceptionTapHold.ahk
+;#include Lib\TapHoldManager.ahk
 
 AHI := new AutoHotInterception()
 ; keyboard1Id := AHI.GetDeviceIdFromHandle(false, "HID\VID_03EB&PID_FF02&REV_0008&MI_03")
