@@ -67,8 +67,8 @@ You can pass as many parameters as you want.
 `thm := new TapHoldManager()`  
 `thm := new TapHoldManager(100, 200, 1, "$*")`  
 
-When specifying parameters, you can use `-1` to leave that parameter at it's default.  
-For example, if you only wish to alter the `prefix` (3rd) parameter, you could omit (Or pass `-1`) the first three parameters.  
+When specifying parameters, you can omit the parameter (or use `-1`) to leave that parameter at it's default.  
+For example, if you only wish to alter the `prefix` (3rd) parameter, you could do:  
 `thm := new TapHoldManager(-1, -1, -1, "$*")` 
 Or  
 `thm := new TapHoldManager(,,, "$*")` 
