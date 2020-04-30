@@ -4,7 +4,7 @@
 ; If you placed all the library files in your My Documents\AutoHotkey\lib folder, use this
 ;#include <TapHoldManager>
 
-thm := new TapHoldManager(,,maxTaps = 3,,"ahk_exe notepad.exe") ; with window parameter set here, default window criteria that will be set for all sub-created hotkeys under this manager object is notepad
+thm := new TapHoldManager(,,,,"ahk_exe notepad.exe") ; with window parameter set here, default window criteria that will be set for all sub-created hotkeys under this manager object is notepad
 thm.Add("1", Func("MyFunc1"))
 thm.Add("2", Func("MyFunc2"))
 thm.Add("3", Func("MyFunc3"),,,,,"ahk_class WordPadClass") ; this hotkey's window criteria will be WordPad (instead of manager object's previously passed-in notepad default)
