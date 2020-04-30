@@ -118,16 +118,26 @@ TapHoldManager works in both AutoHotInterception modes - "Context" and "Subscrip
 Just before you call `Add`, set the context for hotkeys using `hotkey, if, <context var>` which matches that which your AHK Context Callback sets.  
 For example:  
 ```
-SetKb1Context(state){
-	global isKeyboard1Active
-	Sleep 0		; We seem to need this for hotstrings to work, not sure why
-	isKeyboard1Active := state
+#include Lib\TapHoldManager.ahk
+#include <AutoHotInterception>
+
+AHI := new AutoHotInterception()
+keyboardId := AHI.GetKeyboardId(0x03EB, 0xFF02, 2)
+cm1 := AHI.CreateContextManager(keyboardId)
+
+thm := new TapHoldManager()
+
+hotkey, if, cm1.IsActive
+thm.Add("1", Func("MyFunc1"))
+hotkey, if
+return
+
+MyFunc1(isHold, taps, state){
+    Tooltip % "IsHold: " isHold "`nTaps: " taps "`nState: " state
 }
 
-[...]
-
-hotkey, if, isKeyboard1Active	; < Causes TapHoldManager's hotkeys to use the context
-thm.Add("1", Func("MyFunc1"))
+#if cm1.IsActive ; Hotkey, if needs a context to match, even if it is empty
+#if
 ```
 
 ### AutoHotInterception Subscription Mode 
