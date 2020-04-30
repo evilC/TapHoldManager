@@ -5,14 +5,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 ### Added
-- Add support for context-specific hotkeys (THM only takes effect when a specific window is active)  
-- Add Pause / Resume hotkeys functionality
 ### Changed 
-- InterceptionTapHold now accepts an instance of AutoHotInterception and a Device ID  
-This allows you to use AutoHotInterception's GetDeviceIdFromHandle method to get device ID
 ### Deprecated
 ### Removed
 ### Fixed
+
+## [1.5] - 2020-04-30
+### Added
+- Add support for context-specific hotkeys (THM only takes effect when a specific window is active)  
+- Add Pause / Resume hotkeys functionality  
+
+### Changed 
+- InterceptionTapHold now accepts an instance of AutoHotInterception and a Device ID  
+This allows you to use AutoHotInterception's GetDeviceIdFromHandle method to get device ID
 
 ## [1.4] - 2019-02-28
 ### Added
