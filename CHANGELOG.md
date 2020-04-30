@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 ### Added
+- Add support for context-specific hotkeys (THM only takes effect when a specific window is active)  
+- Add Pause / Resume hotkeys functionality
 ### Changed 
 ### Deprecated
 ### Removed
