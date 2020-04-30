@@ -1,16 +1,10 @@
-#include %A_LineFile%\..\TapHoldManager.ahk
-#include %A_LineFile%\..\AutoHotInterception.ahk
-
 ; Patch for TapAndHoldManager to convert it to use Interception
 class InterceptionTapHold extends TapHoldManager {
-	__New(VID, PID, isMouse := false, instance := 1, tapTime := -1, holdTime := -1, maxTaps := -1, block := true){
-		this.AHI := new AutoHotInterception()
-		this.isMouse := isMouse, this.block := block
-		this.id := this.AHI.GetDeviceId(isMouse, vid, pid, instance)
-		id := this.id
-		if (!(this.id > 0 &&  this.id < 21)){
-			MsgBox % "Unknown device id " this.id " for device VID " VID ", PID " PID ", Instance " instance
-		}
+	__New(ahi, id, tapTime := -1, holdTime := -1, maxTaps := -1, block := true){
+		this.AHI := ahi
+		this.isMouse := (id > 10)
+		this.block := block
+		this.id := id
 		base.__New(tapTime, holdTime, maxTaps, "")
 	}
 	
