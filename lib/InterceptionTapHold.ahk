@@ -28,15 +28,26 @@ class InterceptionKeyManager extends KeyManager {
 	}
 
 	DeclareHotkeys(){
+		this.SetState(1)
+	}
+	
+	SetState(state){
 		if (this.manager.isMouse){
 			if (!this.mouseButtonIds.HasKey(this.keyName)){
 				MsgBox % "Unknown Mouse Button name " this.keyName
 				ExitApp
 			}
 			keyName := this.mouseButtonIds[this.keyName]
-			result := this.manager.AHI.SubscribeMouseButton(this.manager.id, keyName, this.block, this.KeyEvent.Bind(this))
+			if (state)
+				result := this.manager.AHI.SubscribeMouseButton(this.manager.id, keyName, this.block, this.KeyEvent.Bind(this))
+			else
+				result := this.manager.AHI.UnsubscribeMouseButton(this.manager.id, keyName)
+				
 		} else {
-			result := this.manager.AHI.SubscribeKey(this.manager.id, GetKeySC(this.keyName), this.block, this.KeyEvent.Bind(this))
+			if (state)
+				result := this.manager.AHI.SubscribeKey(this.manager.id, GetKeySC(this.keyName), this.block, this.KeyEvent.Bind(this))
+			else
+				result := this.manager.AHI.UnsubscribeKey(this.manager.id, GetKeySC(this.keyName))
 		}
 	}
 }
