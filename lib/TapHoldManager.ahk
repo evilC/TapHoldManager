@@ -142,6 +142,7 @@ class KeyManager {
 			; Key went down
 			this.sequence++
 			this.SetHoldWatcherState(1)
+			this.Callback.Call(0, this.sequence, 1)  ; Callback on keydown. isHold=0, seq, state=1
 		} else {
 			; Key went up
 			this.SetHoldWatcherState(0)
