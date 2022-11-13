@@ -37,7 +37,7 @@ keyName					The name of the key to declare a hotkey to
 */
 class KeyManager {
 	state := 0					; Current state of the key
-	sequence := 0				; Number of taps so far
+	sequence := 0				; Number of presses so far
 	
 	holdWatcherState := 0		; Are we potentially in a hold state?
 	tapWatcherState := 0		; Has a tap release occurred and another could possibly happen?
@@ -80,6 +80,7 @@ class KeyManager {
 		this.keyName := keyName
 		
 		this.HoldWatcherFn := this.HoldWatcher.Bind(this)
+		this.FullHoldWatcherFn := this.FullHoldWatcher.Bind(this)
 		this.TapWatcherFn := this.TapWatcher.Bind(this)
 		this.JoyReleaseFn := this.JoyButtonRelease.Bind(this)
 		this.JoyWatcherFn := this.JoyButtonWatcher.Bind(this)
@@ -142,15 +143,16 @@ class KeyManager {
 			; Key went down
 			this.sequence++
 			this.SetHoldWatcherState(1)
+			this.SetFullHoldWatcherState(1)
 		} else {
 			; Key went up
 			this.SetHoldWatcherState(0)
-			if (this.holdActive){
-				fn := this.FireCallback.Bind(this, this.sequence, 0)
+			if (this.fullHoldActive){
+				fn := this.FireCallback.Bind(this, 0, 0)
 				SetTimer, % fn, -0
 				this.ResetSequence()
 			} else {
-				if (this.maxTaps > 0 && this.Sequence == this.maxTaps){
+				if (this.maxTaps > 0 && this.sequence == this.maxTaps){
 					fn := this.FireCallback.Bind(this, this.sequence, -1)
 					SetTimer, % fn, -0
 					this.ResetSequence()
@@ -163,9 +165,11 @@ class KeyManager {
 	
 	ResetSequence(){
 		this.SetHoldWatcherState(0)
+		this.SetFullHoldWatcherState(0)
 		this.SetTapWatcherState(0)
 		this.sequence := 0
 		this.holdActive := 0
+		this.fullHoldActive := 0
 	}
 	
 	; When a key is pressed, if it is not released within tapTime, then it is considered a hold
@@ -175,6 +179,13 @@ class KeyManager {
 		SetTimer, % fn, % (state ? "-" this.holdTime : "Off")
 	}
 	
+	; When a key has been held long enough to also breach the tapTime
+	SetFullHoldWatcherState(state){
+		this.fullHoldWatcherState := state
+		fn := this.FullHoldWatcherFn
+		SetTimer, % fn, % (state ? "-" this.tapTime : "Off")
+	}
+	
 	; When a key is released, if it is re-pressed within tapTime, the sequence increments
 	SetTapWatcherState(state){
 		this.tapWatcherState := state
@@ -182,7 +193,7 @@ class KeyManager {
 		SetTimer, % fn, % (state ? "-" this.tapTime : "Off")
 	}
 	
-	; If this function fires, a key was held for longer than the tap timeout, so engage hold mode
+	; If this function fires, a key was held for longer than the hold timeout, so engage hold mode
 	HoldWatcher(){
 		if (this.sequence > 0 && this.state == 1){
 			; Got to end of tapTime after first press, and still held.
@@ -191,6 +202,10 @@ class KeyManager {
 			SetTimer, % fn, -0
 			this.holdActive := 1
 		}
+	}
+
+	FullHoldWatcher(){
+		this.fullHoldActive := 1
 	}
 	
 	; If this function fires, a key was released and we got to the end of the tap timeout, but no press was seen
