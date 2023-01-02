@@ -42,8 +42,8 @@ class KeyManager {
 	holdWatcherState := 0		; Are we potentially in a hold state?
 	tapWatcherState := 0		; Has a tap release occurred and another could possibly happen?
 	
-	holdActive := 0				; A hold was activated and we are waiting for the release
-	
+	fullHoldActive := 0
+
 	__New(manager, keyName, Callback, tapTime := -1, holdTime := -1, maxTaps := -1, prefixes := -1, window := ""){
 		this.manager := manager
 		this.Callback := Callback
@@ -168,7 +168,6 @@ class KeyManager {
 		this.SetFullHoldWatcherState(0)
 		this.SetTapWatcherState(0)
 		this.sequence := 0
-		this.holdActive := 0
 		this.fullHoldActive := 0
 	}
 	
@@ -200,12 +199,12 @@ class KeyManager {
 			; HOLD PRESS
 			fn := this.FireCallback.Bind(this, this.sequence, 1)
 			SetTimer, % fn, -0
-			this.holdActive := 1
 		}
 	}
 
+	; if this function fires, a key was held for longer than the tap timeout, so engage FULL hold mode
 	FullHoldWatcher(){
-		this.fullHoldActive := 1
+		this.fullHoldActive := this.state == 1
 	}
 	
 	; If this function fires, a key was released and we got to the end of the tap timeout, but no press was seen
