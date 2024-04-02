@@ -9,23 +9,18 @@ ToDo:
 class TapHoldManager {
 	Bindings := Map()
 
-	__New(tapTime := 150, holdTime := tapTime, maxTaps := -1, prefixes := "$", window := ""){
-		if (tapTime == -1)
-			tapTime := 150
-		if (holdTime == -1)
-			holdTime := tapTime
-		this.tapTime := tapTime
-		this.holdTime := holdTime
+	__New(tapTime := "", holdTime := "", maxTaps := "", prefixes := "$", window := ""){
+		this.holdTime := holdTime == "" ? this.tapTime : tapTime
 		this.maxTaps := maxTaps
 		this.prefixes := prefixes
 		this.window := window
 	}
 
     ; Add a key
-	Add(keyName, callback, tapTime?, holdTime?, maxTaps?, prefixes?, window?){
+	Add(keyName, callback, tapTime := "", holdTime := "", maxTaps := "", prefixes := "", window := ""){
 		if this.Bindings.Has(keyName)
 			this.RemoveHotkey(keyName)
-		this.Bindings[keyName] := TapHoldManager.KeyManager(this, keyName, callback, tapTime ?? this.tapTime, holdTime ?? this.holdTime, maxTaps ?? this.maxTaps, prefixes ?? this.prefixes, window ?? this.window)
+		this.Bindings[keyName] := TapHoldManager.KeyManager(this, keyName, callback, tapTime, holdTime, maxTaps, prefixes, window)
 	}
 
     ; Remove a key
@@ -44,24 +39,23 @@ class TapHoldManager {
 	}
 
 	class KeyManager {
-        state := 0					; Current state of the key
-        sequence := 0				; Number of taps so far
-        
-        holdWatcherState := 0		; Are we potentially in a hold state?
-        tapWatcherState := 0		; Has a tap release occurred and another could possibly happen?
-        
-        holdActive := 0				; A hold was activated and we are waiting for the release
+		__New(manager, keyName, callback, tapTime := "", holdTime := "", maxTaps := "", prefixes := "", window := ""){
+            this.state := 0					; Current state of the key
+            this.sequence := 0				; Number of taps so far
+            
+            this.holdWatcherState := 0		; Are we potentially in a hold state?
+            this.tapWatcherState := 0		; Has a tap release occurred and another could possibly happen?
+            
+            this.holdActive := 0				; A hold was activated and we are waiting for the release
     
-        ; ToDo: Use "?"" syntax like TapHoldManager does?
-		__New(manager, keyName, callback, tapTime?, holdTime?, maxTaps?, prefixes?, window?){
             this.manager := manager
             this.keyName := keyName
             this.callback := callback
-            this.tapTime := tapTime ?? manager.tapTime
-            this.holdTime := holdTime ?? manager.holdTime
-            this.maxTaps := maxTaps ?? manager.maxTaps
-            this.prefixes := prefixes ?? manager.prefixes
-            this.window := window ?? manager.window
+            this.tapTime := tapTime == "" ? manager.tapTime : tapTime
+            this.holdTime := holdTime == "" ? manager.holdTime : holdTime
+            this.maxTaps := maxTaps == "" ? manager.maxTaps : maxTaps
+            this.prefixes := prefixes == "" ? manager.prefixes : prefixes
+            this.window := window == "" ? manager.window : window
 
 			this.HoldWatcherFn := this.HoldWatcher.Bind(this)
 			this.TapWatcherFn := this.TapWatcher.Bind(this)
@@ -132,7 +126,7 @@ class TapHoldManager {
 					this.ResetSequence()
 					return
 				} else {
-                    if (this.maxTaps > 0 && this.Sequence == this.maxTaps){
+                    if (this.maxTaps && this.Sequence == this.maxTaps){
                         SetTimer this.FireCallback.Bind(this, this.sequence, -1), -1
                         this.ResetSequence()
                     } else {
@@ -159,6 +153,7 @@ class TapHoldManager {
         ; When a key is released, if it is re-pressed within tapTime, the sequence increments
         SetTapWatcherState(state){
             this.tapWatcherState := state
+            ; SetTimer this.TapWatcherFn, (state ? "-" this.tapTime : 0)
             SetTimer this.TapWatcherFn, (state ? "-" this.tapTime : 0)
         }
         
