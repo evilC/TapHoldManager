@@ -1,26 +1,21 @@
 ﻿#Requires AutoHotkey v2.0
 
-/*
-ToDo:
-* Move to using null for optional parameters?
-    Already done for Add, but not for TapHoldManager ctor
-*/
-
 class TapHoldManager {
 	Bindings := Map()
 
-	__New(tapTime := "", holdTime := "", maxTaps := "", prefixes := "$", window := ""){
-		this.holdTime := holdTime == "" ? this.tapTime : tapTime
+	__New(tapTime?, holdTime?, maxTaps := "", prefixes := "$", window := ""){
+		this.tapTime := tapTime ?? 150
+		this.holdTime := holdTime ?? this.tapTime
 		this.maxTaps := maxTaps
 		this.prefixes := prefixes
 		this.window := window
 	}
 
     ; Add a key
-	Add(keyName, callback, tapTime := "", holdTime := "", maxTaps := "", prefixes := "", window := ""){
+	Add(keyName, callback, tapTime?, holdTime?, maxTaps?, prefixes?, window?){
 		if this.Bindings.Has(keyName)
 			this.RemoveHotkey(keyName)
-		this.Bindings[keyName] := TapHoldManager.KeyManager(this, keyName, callback, tapTime, holdTime, maxTaps, prefixes, window)
+		this.Bindings[keyName] := TapHoldManager.KeyManager(this, keyName, callback, tapTime ?? this.tapTime, holdTime ?? this.holdTime, maxTaps?? this.maxTaps, prefixes?, window?)
 	}
 
     ; Remove a key
@@ -39,7 +34,8 @@ class TapHoldManager {
 	}
 
 	class KeyManager {
-		__New(manager, keyName, callback, tapTime := "", holdTime := "", maxTaps := "", prefixes := "", window := ""){
+        ; AutoHotInterception mod does not use prefixes or window, so these parameters must be optional
+		__New(manager, keyName, callback, tapTime, holdTime, maxTaps, prefixes?, window?){
             this.state := 0					; Current state of the key
             this.sequence := 0				; Number of taps so far
             
@@ -51,11 +47,11 @@ class TapHoldManager {
             this.manager := manager
             this.keyName := keyName
             this.callback := callback
-            this.tapTime := tapTime == "" ? manager.tapTime : tapTime
-            this.holdTime := holdTime == "" ? manager.holdTime : holdTime
-            this.maxTaps := maxTaps == "" ? manager.maxTaps : maxTaps
-            this.prefixes := prefixes == "" ? manager.prefixes : prefixes
-            this.window := window == "" ? manager.window : window
+            this.tapTime := tapTime
+            this.holdTime := holdTime
+            this.maxTaps := maxTaps
+            this.prefixes := prefixes ?? manager.prefixes
+            this.window := window ?? manager.window
 
 			this.HoldWatcherFn := this.HoldWatcher.Bind(this)
 			this.TapWatcherFn := this.TapWatcher.Bind(this)
