@@ -32,7 +32,7 @@ HandleInput(axis, dir, isHold, taps, state := -1){
 		; Tap
 		x := 0
 		y := 0
-		%axis% := (dir * taps) * MoveMultiplier * MoveMultiplier
+		%axis% := (dir * taps) * MoveMultiplier
 		MouseMove, % x, % y, 0, R
 	}
 }
