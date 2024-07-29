@@ -162,7 +162,7 @@ To make holds fire as quickly as possible, setting `holdTime` as low as possible
 
 # Integration with the Interception driver (Multiple Keyboard support)
 
-TapHoldManager can use the [Interception driver](http://www.oblita.com/interception) to add support for per-keyboard hotkeys - you can bind TapHoldManager to keys on a second keyboard, and use them completely independently of your main keyboard.  
+TapHoldManager can use the [Interception driver](https://github.com/oblitum/Interception/tree/v1.0.1) to add support for per-keyboard hotkeys - you can bind TapHoldManager to keys on a second keyboard, and use them completely independently of your main keyboard.  
 
 ## Interception Setup
 
